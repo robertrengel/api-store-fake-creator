@@ -18,7 +18,9 @@ def set_category():
     db.session.commit()
     
     #custom request json
-    request_json = jsonify({"status": "success", "message": "Datos guardados correctamente", "data": data})
+    request_json = jsonify({"status": "success",
+                            "message": "Datos guardados correctamente",
+                            "data": data})
     
     #custom request header
     request_make = make_response(request_json)
@@ -29,4 +31,15 @@ def set_category():
 
 @add_user.route("/", methods = ["GET"])
 def get_category():
-    return jsonify({"mensaje":"respuesta normal"})
+    category = Prueba.query.all()
+    results = [
+            {
+                "id":categorys.id,
+                "fullname": categorys.fullname,
+                "email": categorys.email,
+                "phone": categorys.phone
+            } for categorys in category]
+    
+
+    return jsonify({"category": results})
+
