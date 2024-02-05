@@ -6,7 +6,7 @@ class BrandModel(db.Model):
     name = db.Column(db.String(255))
     country = db.Column(db.String(255))
     
-    products = db.relationship('ProductModel', backref='brand', lazy=True)
+    products = db.relationship('ProductModel', back_populates ='brand', lazy=True)
 
     def __init__(self, name, country):
         self.name = name

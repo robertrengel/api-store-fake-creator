@@ -46,7 +46,7 @@ def set_product():
 
 @add_product.route("/", methods  = ["GET"])
 def get_product():
-    product = ProductModel.query.all()
+    product = ProductModel.query.options(db.joinedload(ProductModel.brand)).all()
     results = [
             {
                 "id":products.id,
@@ -60,7 +60,11 @@ def get_product():
                 "stock": products.stock,
                 "sales_count": products.sales_count,
                 "create_at": products.create_at,
-                "brand_id": products.brand_id
+                "brand": {
+                    "id": products.brand.id,
+                    "name": products.brand.name
+                    
+                }
             } for products in product
     ]
     return jsonify({"products": results})
