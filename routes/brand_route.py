@@ -4,18 +4,6 @@ from utils.db import db
 
 add_brand = Blueprint("brand_BP", __name__)
 
-@add_brand.route("/", methods = ["GET"])
-def get_brands():
-    brands = BrandModel.query.all()
-    results = [
-        {
-            "id": brands.id,
-            "name": brands.name,
-            "country": brands.country
-        } for brands in brands
-    ]
-    return jsonify({"brands": results})
-
 @add_brand.route("/", methods = ["POST"])
 def set_brand():
     data = request.get_json()
@@ -38,3 +26,15 @@ def set_brand():
     request_make.headers['location'] = '/'
     
     return request_make
+
+@add_brand.route("/", methods = ["GET"])
+def get_brands():
+    brands = BrandModel.query.all()
+    results = [
+        {
+            "id": brands.id,
+            "name": brands.name,
+            "country": brands.country
+        } for brands in brands
+    ]
+    return jsonify({"brands": results})

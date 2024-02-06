@@ -1,7 +1,4 @@
 from utils.db import db
-from .enum.sizes_enum import Sizes
-from .enum.color_enum import Colors
-
 
 class ProductModel(db.Model):
     __tablename__ = "product"
@@ -15,18 +12,23 @@ class ProductModel(db.Model):
     discount = db.Column(db.Float)
     rating = db.Column(db.Float)
     review = db.Column(db.Integer)
-    available_sizes = db.Column(db.Enum(Sizes))
-    available_colors = db.Column(db.Enum(Colors))
     stock = db.Column(db.Integer)
     sales_count = db.Column(db.Integer)
     create_at = db.Column(db.DateTime)
-    tags = db.Column(db.ARRAY(db.String(255)))
+    
     brand_id = db.Column(db.Integer, db.ForeignKey('brand.id'))
-    category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
+    tag_id = db.Column(db.Integer, db.ForeignKey('tag.id')) 
+    available_sizes_id = db.Column(db.Integer, db.ForeignKey('available_sizes.id'))
+    available_color_id = db.Column(db.Integer, db.ForeignKey('available_colors.id'))
+    categories_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
+
+    available_sizes = db.relationship("SizesModel", back_populates = "products")    
+    tag = db.relationship("TagModel", back_populates = "products")
+    available_colors = db.relationship('ColorsModel', back_populates = 'products')
     brand = db.relationship('BrandModel', back_populates='products')
     categories = db.relationship('CategoryModel', back_populates='products')
     
-    def __init__(self, name, description, image, price, discount, rating, review, stock, sales_count, create_at, brand_id):
+    def __init__(self, name, description, image, price, discount, rating, review, stock, sales_count, create_at, brand_id, tag_id, available_sizes_id, available_color_id, categories_id):
         self.name = name
         self.description = description
         self.image = image
@@ -38,8 +40,12 @@ class ProductModel(db.Model):
         self.sales_count = sales_count
         self.create_at = create_at
         self.brand_id = brand_id
+        self.tag_id = tag_id
+        self.available_sizes_id = available_sizes_id
+        self.available_color_id = available_color_id
+        self.categories_id = categories_id
+        
         
 
 # --> hay que definir los nuevos valores de las rutas
-# # !hay que probar que funcione los enum
 # * todas las tabla parecen estar bien creadas
