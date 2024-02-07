@@ -48,4 +48,5 @@ class ProductModel(db.Model):
         
 
 # --> hay que definir los nuevos valores de las rutas
+# --> definir valores predeterminados para la base de datos de la tabla color, sizes y tag
 # * todas las tabla parecen estar bien creadas

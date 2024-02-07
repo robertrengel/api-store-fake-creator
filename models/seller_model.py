@@ -6,7 +6,7 @@ class SellerModel(db.Model):
     
     id = db.Column(db.Integer, primary_key =True)
     name = db.Column(db.String(255))
-    store_id = db.Column(db.string(10))
+    store_id = db.Column(db.String(10))
     state = db.Column(db.String(10))
     
     def __init__(self, name, store_id, state):

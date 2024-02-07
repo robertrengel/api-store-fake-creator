@@ -12,4 +12,4 @@ class ColorsModel(db.Model):
     color = db.Column(db.ARRAY(db.String(50)))
     products = db.relationship("ProductModel", secondary = color_product, back_populates = "available_colors")
     def __init__(self, color):
-        self.color = ["Black", "White", "Red", "Blue", "Green"]
+        self.color = color

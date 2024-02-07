@@ -32,7 +32,7 @@ def get_category():
     results = [
         {
             "id": categorys.id,
-            "categories": categorys.category
+            "categories": categorys.categories
         } for categorys in category
     ]
 
