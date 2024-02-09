@@ -4,13 +4,29 @@ from utils.db import db
 
 add_size = Blueprint("size_BP", __name__)
 
+# Función de inicialización para cargar datos en la base de datos
+def init_db():
+    # Verifica si ya existen datos en la tabla Producto
+    if not SizesModel.query.first():
+        # Si no hay datos, carga los datos iniciales
+        sizes = [
+            SizesModel(size = ["S", "M", "L", "X", "XL", "XXL"]),
+            SizesModel(size = ["SS","S", "M", "L", "X", "XL", "XXL", "XXXL"]),
+        ]
+        db.session.bulk_save_objects(sizes)
+        db.session.commit()
+
+# Llamada a la función de inicialización al iniciar la aplicación
+@add_size.before_request
+def before_request():
+    init_db()
+
 @add_size.route("/", methods = ["POST"])
 def set_size():
     data = request.get_json()
-    name = data.get("name")
-    state = data.get("state")
+    size = data.get("size")
 
-    size = SizesModel(name=name, state=state)
+    size = SizesModel(size=size)
 
     db.session.add(size)
     db.session.commit()
@@ -32,10 +48,9 @@ def get_size():
     size = SizesModel.query.all()
     results = [
         {
-            "id": size.id,
-            "name": size.name,
-            "state": size.state
-        } for size in size
+            "id": sizes.id,
+            "size": sizes.size,
+        } for sizes in size
         
     ]
     

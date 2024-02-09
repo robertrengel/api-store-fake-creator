@@ -4,6 +4,19 @@ from utils.db import db
 
 add_color = Blueprint("color_BP", __name__)
 
+def init_db():
+    if not ColorsModel.query.first():
+        colors = [
+            ColorsModel(color = ["Black", "Red", "Blue"]),
+            ColorsModel(color = ["Black", "Yellow", "Orange"]),
+        ]
+        db.session.bulk_save_objects(colors)
+        db.session.commit()
+
+@add_color.before_request
+def before_request():
+    init_db()
+
 @add_color.route("/", methods = ["POST"])
 def set_color():
     data = request.get_json()

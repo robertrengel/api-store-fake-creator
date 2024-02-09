@@ -4,6 +4,19 @@ from utils.db import db
 
 add_tag = Blueprint("tag_BP", __name__)
 
+def init_db():
+    if not TagModel.query.first():
+        tags = [
+            TagModel(label = ["Electronic", "shift", "Toys"]),
+            TagModel(label= ["Home","Children"])
+        ]
+        db.session.bulk_save_objects(tags)
+        db.session.commit()
+
+@add_tag.before_request
+def before_request():
+    init_db()
+
 @add_tag.route("/", methods = ["POST"])
 def set_tag():
     data = request.get_json()

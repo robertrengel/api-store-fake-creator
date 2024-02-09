@@ -28,10 +28,11 @@ class ProductModel(db.Model):
     brand = db.relationship('BrandModel', back_populates='products')
     categories = db.relationship('CategoryModel', back_populates='products')
     
-    def __init__(self, name, description, image, price, discount, rating, review, stock, sales_count, create_at, brand_id, tag_id, available_sizes_id, available_color_id, categories_id):
+    def __init__(self, name, description, image,images, price, discount, rating, review, stock, sales_count, create_at, brand_id, tag_id, available_sizes_id, available_color_id, categories_id):
         self.name = name
         self.description = description
         self.image = image
+        self.images = images
         self.price = price
         self.discount = discount
         self.rating = rating
