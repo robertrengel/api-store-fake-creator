@@ -28,6 +28,7 @@ def set_product():
     available_sizes_id = data.get("available_sizes_id")
     available_color_id = data.get("available_color_id")
     categories_id = data.get("categories_id")
+    seller_id = data.get("seller_id")
     
     product = ProductModel(name = name,
                            description = description,
@@ -44,7 +45,8 @@ def set_product():
                            tag_id = tag_id,
                            available_sizes_id= available_sizes_id,
                            available_color_id= available_color_id,
-                           categories_id= categories_id
+                           categories_id= categories_id,
+                           seller_id= seller_id
                            )
                             
     
@@ -63,46 +65,55 @@ def set_product():
 
 @add_product.route("/", methods  = ["GET"])
 def get_product():
-    product = ProductModel.query.options(join).all()
-    print("aqui algo que se imprime", product[0].images)
+    products = ProductModel.query.options(join).all()
+    print("aqui algo que se imprime", products[0].images)
     results = [
             {
-                "id":products.id,
-                "name": products.name,
-                "description": products.description,
-                "image": products.image,
-                "images": products.images,
-                "price": products.price,
-                "discount": products.discount,
-                "rating": products.rating,
-                "review": products.review,
-                "stock": products.stock,
-                "sales_count": products.sales_count,
-                "create_at": products.create_at,
+                "id":product.id,
+                "name": product.name,
+                "description": product.description,
+                "image": product.image,
+                "images": product.images,
+                "price": product.price,
+                "discount": product.discount,
+                "rating": product.rating,
+                "review": product.review,
+                "stock": product.stock,
+                "sales_count": product.sales_count,
+                "create_at": product.create_at,
                 "brand": {
-                    "id": products.brand.id,
-                    "name": products.brand.name       
+                    "id": product.brand.id,
+                    "name": product.brand.name       
                 },
                 "tags":{
-                    "id": products.tag.id,
-                    "tag": products.tag.label
+                    "id": product.tag.id,
+                    "tag": product.tag.label
                 },
                 "sizes":{
-                    "id": products.available_sizes.id,
-                    "sizes": products.available_sizes.size
+                    "id": product.available_sizes.id,
+                    "sizes": product.available_sizes.size
                 },
                 "colors": {
-                    "id": products.available_color.id,
-                    "colors": products.available_color.color
+                    "id": product.available_colors.id,
+                    "colors": product.available_colors.color
                 },
                 "categories":{
-                    "id": products.categories.id,
-                    "categories": products.categories.categories
+                    "id": product.categories.id,
+                    "categories": product.categories.categories
+                    
+                },
+                "seller":{
+                    "id": product.seller.id,
+                    "name": product.seller.name,
+                    "store_id": product.seller.store_number,
+                    "state": product.seller.state
                     
                 }
                 
-            } for products in product
+            } for product in products
     ]
     return jsonify({"products": results})
 
-# ! hay problemas con el get. no se detectan el ide del color
+
+#! verificar porque la relaciones de las tablas intermendis aunque se 
+#! estan creando no hay ningun valor en ellas.

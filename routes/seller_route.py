@@ -8,10 +8,10 @@ add_seller = Blueprint("seller_BP", __name__)
 def set_seller():
     data = request.get_json()
     name = data.get("name")
-    store_id = data.get("store_id")
+    store_number = data.get("store_number")
     state = data.get("state")
 
-    seller = SellerModel(name=name, store_id=store_id, state=state)
+    seller = SellerModel(name=name, store_number=store_number, state=state)
 
     db.session.add(seller)
     db.session.commit()
@@ -35,7 +35,7 @@ def get_seller():
         {
             "id": seller.id,
             "name": seller.name,
-            "store_id": seller.store_id,
+            "store_id": seller.store_number,
             "state": seller.state
         } for seller in seller
     ]
