@@ -38,3 +38,46 @@ def get_brands():
         } for brands in brands
     ]
     return jsonify({"brands": results})
+
+@add_brand.route("/<int:brand_id>", methods=["GET"])
+def get_brand_by_id(brand_id):
+    brand = BrandModel.query.get(brand_id)
+    if not brand:
+        return jsonify({"message": "Brand not found"}), 404
+    return jsonify({
+        "id": brand.id,
+        "name": brand.name,
+        "country": brand.country
+    })
+
+@add_brand.route("/<int:brand_id>", methods=["PUT"])
+def update_brand(brand_id):
+    brand = BrandModel.query.get(brand_id)
+    if not brand:
+        return jsonify({"message": "Brand not found"}), 404
+    
+    data = request.get_json()
+    name = data.get("name", brand.name)
+    country = data.get("country", brand.country)
+    
+    brand.name = name
+    brand.country = country
+    
+    db.session.commit()
+    
+    return jsonify({
+        "id": brand.id,
+        "name": brand.name,
+        "country": brand.country
+    }), 200
+
+@add_brand.route("/<int:brand_id>", methods=["DELETE"])
+def delete_brand(brand_id):
+    brand = BrandModel.query.get(brand_id)
+    if not brand:
+        return jsonify({"message": "Brand not found"}), 404
+
+    db.session.delete(brand)
+    db.session.commit()
+
+    return jsonify({"message": "Brand deleted successfully"}), 200
